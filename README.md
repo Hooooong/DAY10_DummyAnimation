@@ -3,9 +3,9 @@
 ### 설명
 ____________________________________________________
 
-![DummyAnimation]()
+  ![DummyAnimation](https://github.com/Hooooong/DAY10_DummyAnimation/blob/master/image/DummyAnimation.gif)
 
-- 동적 Button 을 생성하여 Goal 까지 이동시키는 애니메이션
+  - Button 클릭 시, 동적 Button 을 생성하여 Goal 까지 이동시키는 애니메이션
 
 
 ### 소스코드
