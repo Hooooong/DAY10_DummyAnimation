@@ -3,82 +3,52 @@
 ### 설명
 ____________________________________________________
 
-  ![DummyAnimation](https://github.com/Hooooong/DAY10_DummyAnimation/blob/master/image/DummyAnimation.gif)
+![DummyAnimation](https://github.com/Hooooong/DAY10_DummyAnimation/blob/master/image/DummyAnimation.gif)
 
-  - Button 클릭 시, 동적 Button 을 생성하여 Goal 까지 이동시키는 애니메이션
+- Button 클릭 시, 동적 Button 을 생성하여 Goal 까지 이동시키는 애니메이션
 
-
-### 소스코드
+### KeyPoint
 ____________________________________________________
 
-  - actity_main.xml
+- 동적 View 생성
 
-  ```xml
-  <?xml version="1.0" encoding="utf-8"?>
-  <android.support.constraint.ConstraintLayout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      tools:context="hooooong.com.dummyanimation.MainActivity"
-      android:id="@+id/stage">
+  - 동적 View(Button) 을 생성
 
-      <Button
-          android:id="@+id/btnGoal"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="GOAL"
-          android:layout_marginRight="8dp"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          android:layout_marginTop="8dp" />
+  ```java
+  // 실제 날아갈 더미를 생성해서 상위 레이아웃에 담은 후에 처리한다.
+  final Button btnDummy = new Button(this);
 
-      <LinearLayout
-          android:layout_width="368dp"
-          android:layout_height="117dp"
-          android:layout_marginBottom="8dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"
-          android:orientation="horizontal"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintHorizontal_bias="0.0"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent">
-
-          <Button
-              android:id="@+id/btn1"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Button1" />
-
-          <Button
-              android:id="@+id/btn2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Button2" />
-
-          <Button
-              android:id="@+id/btn3"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Button3" />
-
-          <Button
-              android:id="@+id/btn4"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="Button4" />
-      </LinearLayout>
-  </android.support.constraint.ConstraintLayout>
+  // 생성된 더미에 클릭한 버튼의 속성값을 적용한다.
+  btnDummy.setText(original.getText().toString());
+  btnDummy.setWidth(original.getWidth());
+  btnDummy.setHeight(original.getHeight());
+  btnDummy.setBackgroundColor(Color.BLUE);
   ```
 
-  - MainActivity.java
+  - 좌표 설정
+
+  ```java
+  // original.getParent() 는 좌표 속성이 없기 때문에
+  // 부모 레이아웃을 가져와서 원래 클래스로 캐스팅
+  LinearLayout parent = (LinearLayout) original.getParent();
+
+  // 부모 레이아웃의 위치값과 원래 버튼의 위치값을 더한다.
+  btnDummy.setX( original.getX() + parent.getX());
+  btnDummy.setY( original.getY() + parent.getY());
+
+  // 더미를 상위 레이아웃에 담는다.
+  stage.addView(btnDummy);
+  ```
+
+- Animation 설정
+
+  - 참조 : [Animation](https://github.com/Hooooong/DAY9_Animation)
+
+
+### Code Review
+____________________________________________________
+
+- MainActivity.java
 
   ```java
   public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -198,4 +168,71 @@ ____________________________________________________
           }
       }
   }
+  ```
+
+- actity_main.xml
+
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <android.support.constraint.ConstraintLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      tools:context="hooooong.com.dummyanimation.MainActivity"
+      android:id="@+id/stage">
+
+      <Button
+          android:id="@+id/btnGoal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="GOAL"
+          android:layout_marginRight="8dp"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          android:layout_marginTop="8dp" />
+
+      <LinearLayout
+          android:layout_width="368dp"
+          android:layout_height="117dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="8dp"
+          android:orientation="horizontal"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintHorizontal_bias="0.0"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent">
+
+          <Button
+              android:id="@+id/btn1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="Button1" />
+
+          <Button
+              android:id="@+id/btn2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="Button2" />
+
+          <Button
+              android:id="@+id/btn3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="Button3" />
+
+          <Button
+              android:id="@+id/btn4"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="Button4" />
+      </LinearLayout>
+  </android.support.constraint.ConstraintLayout>
   ```
